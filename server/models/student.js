@@ -14,14 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   student.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    classes: DataTypes.ENUM,
-    major_id: DataTypes.INTEGER,
-    gender: DataTypes.ENUM
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      classes: DataTypes.ENUM("X", "XI", "XII", "XIII"), 
+      major_id: DataTypes.INTEGER,
+      gender: DataTypes.ENUM("M", "F") 
   }, {
-    sequelize,
-    modelName: 'student',
+      sequelize,
+      modelName: 'student',
   });
   return student;
 };

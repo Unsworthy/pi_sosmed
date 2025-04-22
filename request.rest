@@ -1,0 +1,31 @@
+GET http://127.0.0.1:3000/student/1
+# Content-Type: application/json
+
+# {
+#     "firstName": "andriane",
+#     "lastName": "fletcher",
+#     "major_id": 4,
+#     "classes": "XII",
+#     "gender": "F"
+# }
+##
+POST  http://127.0.0.1:3000/send-message
+Content-Type: application/json
+
+{
+    "message": "Hello, this is a test message."
+}
+###
+PUT   http://127.0.0.1:3000/student/2
+Content-Type: application/json
+
+{
+    "firstName": "Andriane",
+    "lastName": "Fletcher",
+    "major_id": 6,
+    "classes": "XII",
+    "gender": "F"
+}
+###
+
+GET http://127.0.0.1:3000/student/2

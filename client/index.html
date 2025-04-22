@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Bootstrap Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
@@ -14,11 +14,11 @@
     <div class="container card p-5">
         <h1>Ruang Ghibah PPLG II!</h1>
 
-        <input id="name" placeholder="your name" type="text" class="form-control" required />
+        <input id="name" placeholder="Your Name" type="text" class="form-control" required />
 
         <input id="message" placeholder="Message" type="text" class="form-control my-3" required />
 
-        <button onclick="submit()" class="btn btn-success"> Send Message </button>
+        <button onclick="submitMessage()" class="btn btn-success">Send Message</button>
 
         <div class="my-4">
             <div class="container">
@@ -27,45 +27,58 @@
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
     <script>
-        const contentMessage = document.getElementById('message-content')
-        const nameParticipant = document.getElementById('name')
-        const messageParticipant = document.getElementById('message')
+        const contentMessage = document.getElementById('message-content');
+        const nameParticipant = document.getElementById('name');
+        const messageParticipant = document.getElementById('message');
 
-        let dataMessageParticipant = []
+        let dataMessageParticipant = [];
 
-        const submit = async () => {
-            if (nameParticipant.value === "" || messageParticipant.value === "") {
-                alert("Name and message must be filled!")
-                return
+        const submitMessage = async () => {
+            // Validate input fields
+            if (nameParticipant.value.trim() === "" || messageParticipant.value.trim() === "") {
+                alert("Name and message must be filled!");
+                return;
             }
 
+            // Add new message to the array
             dataMessageParticipant.push({
-                message: messageParticipant.value,
-                name: nameParticipant.value
-            })
+                message: messageParticipant.value.trim(),
+                name: nameParticipant.value.trim()
+            });
 
-            const resonse = await fetch("http://127.0.0.1:3000/send-message", {
-                method: "POST",
-                body: JSON.stringify({ data: dataMessageParticipant }),
-                // ...
-            })
-            // fetch({
-            //     url: 'http://127.0.0.1:3000/send-message',
-            //     method: 'POST',
-            //     body: {
-            //         data: dataMessageParticipant
-            //     }
-            // })
-            //     .then((res) => res)
-            //     .then((res) => console.log(res.data))
-            // console.log(`data message: ${JSON.stringify(dataMessageParticipant)}`)
-        }
+            // Display the message locally
+            const newMessage = document.createElement('li');
+            newMessage.textContent = `${nameParticipant.value.trim()}: ${messageParticipant.value.trim()}`;
+            contentMessage.appendChild(newMessage);
 
+            // Clear input fields
+            nameParticipant.value = "";
+            messageParticipant.value = "";
+
+            // Send data to the server
+            try {
+                const response = await fetch("http://127.0.0.1:3000/send-message", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ data: dataMessageParticipant })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to send message to the server.");
+                }
+
+                console.log("Message sent successfully!");
+            } catch (error) {
+                console.error("Error:", error.message);
+                alert("Failed to send message. Please try again.");
+            }
+        };
     </script>
 </body>
 

@@ -5,6 +5,7 @@ const http = require('http');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { student, user } = require('./models'); // Import model student dan user
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +16,11 @@ const hostName = "127.0.0.1";
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+const cosrOption = {
+    origin: ['http://127.0.0.1:5501'],
+    
+};
+app.use(cors(cosrOption)); 
 const SECRET_KEY = process.env.SECRET_KEY || "adios";
 
 // Endpoint Register
@@ -68,41 +74,6 @@ app.post('/auth/login', async (req, res) => {
         console.error("Error:", error.message);
         res.status(500).json({ error: error.message });
     }
-});
-
-// WebSocket Connection
-wss.on('connection', (ws) => {
-    console.log(`connecting to ws`);
-
-    ws.on('message', (message) => {
-        console.log(`Received: `, message);
-    });
-
-    ws.on('close', () => console.log(`disconnected`));
-});
-
-// Endpoint Send Message
-app.post('/send-message', (req, res) => {
-    const { data } = req.body;
-
-    if (!data) {
-        return res.status(422).json({
-            data: [],
-            message: "No message content!"
-        });
-    }
-
-    res.status(200).json({
-        data: data,
-        message: "Send message success!"
-    });
-});
-
-// Endpoint Home
-app.get("/", (req, res) => {
-    res.send({
-        message: "Welcome to my sosmed backend services!"
-    });
 });
 
 // CRUD Student

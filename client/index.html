@@ -18,7 +18,7 @@
 
         <input id="message" placeholder="Message" type="text" class="form-control my-3" required />
 
-        <button onclick="submitMessage()" class="btn btn-success">Send Message</button>
+        <button onclick="submit()" class="btn btn-success">Send Message</button>
 
         <div class="my-4">
             <div class="container">
@@ -35,49 +35,44 @@
         const nameParticipant = document.getElementById('name');
         const messageParticipant = document.getElementById('message');
 
-        let dataMessageParticipant = [];
+        const SERVER_URL = "http://127.0.0.1:3001/send-message";
 
-        const submitMessage = async () => {
-            // Validate input fields
-            if (nameParticipant.value.trim() === "" || messageParticipant.value.trim() === "") {
+        const submit = async () => {
+            if (nameParticipant.value === "" || messageParticipant.value === "") {
                 alert("Name and message must be filled!");
                 return;
             }
 
-            // Add new message to the array
-            dataMessageParticipant.push({
-                message: messageParticipant.value.trim(),
-                name: nameParticipant.value.trim()
-            });
-
-            // Display the message locally
-            const newMessage = document.createElement('li');
-            newMessage.textContent = `${nameParticipant.value.trim()}: ${messageParticipant.value.trim()}`;
-            contentMessage.appendChild(newMessage);
-
-            // Clear input fields
-            nameParticipant.value = "";
-            messageParticipant.value = "";
-
             // Send data to the server
             try {
-                const response = await fetch("http://127.0.0.1:3000/send-message", {
+                const response = await fetch(SERVER_URL, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ data: dataMessageParticipant })
+                    body: JSON.stringify({
+                        message: messageParticipant.value,
+                        name: nameParticipant.value
+                    })
                 });
 
                 if (!response.ok) {
-                    throw new Error("Failed to send message to the server.");
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Failed to send message to the server.");
                 }
 
-                console.log("Message sent successfully!");
+                alert("Message sent successfully!");
             } catch (error) {
                 console.error("Error:", error.message);
-                alert("Failed to send message. Please try again.");
+                alert(`Failed to send message: ${error.message}`);
             }
+        };
+    </script>
+    <script>
+        const socket = new WebSocket("ws://127.0.0.1:3001");
+
+        socket.onmessage = async (event) => {
+            console.log(event.data);
         };
     </script>
 </body>

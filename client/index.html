@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Demo</title>
+    <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
@@ -14,11 +14,11 @@
     <div class="container card p-5">
         <h1>Ruang Ghibah PPLG II!</h1>
 
-        <input id="name" placeholder="Your Name" type="text" class="form-control" required />
+        <input id="name" placeholder="your name" type="text" class="form-control" required />
 
         <input id="message" placeholder="Message" type="text" class="form-control my-3" required />
 
-        <button onclick="submit()" class="btn btn-success">Send Message</button>
+        <button onclick="submit()" class="btn btn-success"> Send Message </button>
 
         <div class="my-4">
             <div class="container">
@@ -27,53 +27,79 @@
         </div>
     </div>
 
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
     <script>
-        const contentMessage = document.getElementById('message-content');
-        const nameParticipant = document.getElementById('name');
-        const messageParticipant = document.getElementById('message');
+        let dataMessageParticipant = []
 
-        const SERVER_URL = "http://127.0.0.1:3002/send-message";
+        const socket = new WebSocket('ws://127.0.0.1:3002')
 
-        const submit = async () => {
-            if (nameParticipant.value === "" || messageParticipant.value === "") {
-                alert("Name and message must be filled!");
-                return;
-            }
-
-            // Send data to the server
-            try {
-                const response = await fetch(SERVER_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message: messageParticipant.value,
-                        name: nameParticipant.value
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || "Failed to send message to the server.");
-                }
-
-                alert("Message sent successfully!");
-            } catch (error) {
-                console.error("Error:", error.message);
-                alert(`Failed to send message: ${error.message}`);
-            }
-        };
-    </script>
-    <script>
-        const socket = new WebSocket("ws://127.0.0.1:3001");
+        socket.onopen = () => {
+            console.log(`CONNECT TO SERVER`)
+        }
 
         socket.onmessage = async (event) => {
-            console.log(event.data);
-        };
+            console.log(`ON MESSAGE: ${JSON.stringify(event?.data)}`)
+            const messageContent = document.getElementById('message-content')
+
+            const content = JSON.parse(event?.data)
+            dataMessageParticipant.push(content)
+
+            messageContent.innerHTML = await dataMessageParticipant.map(text => `<li>Message From: ${text?.name}</li>
+            <li>Message: ${text?.message}</li>`).join(",", " ")
+
+        }
+
+        socket.onerror = (event) => {
+            console.log(`ON ERROR: ${JSON.stringify(event)}`)
+        }
+
+        socket.onclose = async (event) => {
+            console.log(`ON CLOSE: ${JSON.stringify(event)}`)
+        }
+        const contentMessage = document.getElementById('message-content')
+        const nameParticipant = document.getElementById('name')
+        const messageParticipant = document.getElementById('message')
+
+
+        function submit() {
+            if (nameParticipant.value === "" || messageParticipant.value === "") {
+                alert("Name and message must be filled!")
+                return
+            }
+
+            // dataMessageParticipant.push({
+            //     message: messageParticipant.value,
+            //     name: nameParticipant.value
+            // })
+
+            try {
+                fetch("http://127.0.0.1:3002/send-message", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: nameParticipant.value,
+                        message: messageParticipant.value
+                    }),
+                }).then(async (res) =>
+                    await console.log(res)
+
+                ).then(async (res2) => await console.log(`res2: ${res2}`)
+                ).catch(err => console.log(`ERR: ${err}`))
+
+
+            } catch (error) {
+                console.log(error)
+            }
+
+
+        }
+
     </script>
 </body>
 

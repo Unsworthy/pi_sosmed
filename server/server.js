@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { student, user } = require('./models'); // Import model student dan user
 const cors = require('cors');
+const studentRoute = require('./routes/studentRoute'); // Import route student
 
 const app = express();
 app.use(bodyParser.json());
@@ -76,69 +77,8 @@ app.post('/auth/login', async (req, res) => {
     }
 });
 
-// CRUD Student
-app.get("/student/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const studentData = await student.findByPk(id);
-        if (!studentData) return res.status(404).json({ message: "Student not found" });
-        res.status(200).json(studentData);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+app.use('/student', studentRoute(express));
 
-app.post("/student", async (req, res) => {
-    try {
-        const { firstName, lastName, classes, major_id, gender } = req.body;
-
-        if (!firstName || !lastName || !classes || !major_id || !gender) {
-            return res.status(400).json({ message: "All fields are required!" });
-        }
-
-        const newStudent = await student.create({ firstName, lastName, classes, major_id, gender });
-
-        res.status(201).json({
-            message: "Student created successfully!",
-            data: newStudent
-        });
-    } catch (error) {
-        console.error("Error:", error.message);
-        res.status(500).json({ error: error.message });
-    }
-});
-
-app.put("/student/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { firstName, lastName, classes, major_id, gender } = req.body;
-
-        const updated = await student.update(
-            { firstName, lastName, classes, major_id, gender },
-            { where: { id } }
-        );
-
-        if (!updated[0]) return res.status(404).json({ message: "Student not found" });
-
-        res.status(200).json({ message: "Student updated successfully!" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-app.delete("/student/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const deleted = await student.destroy({ where: { id } });
-
-        if (!deleted) return res.status(404).json({ message: "Student not found" });
-
-        res.status(200).json({ message: "Student deleted successfully!" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running at http://${hostName}:${PORT}`));

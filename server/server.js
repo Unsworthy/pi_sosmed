@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const { student, user } = require('./models'); // Import model student dan user
 const cors = require('cors');
 const studentRoute = require('./routes/studentRoute'); // Import route student
+const authRoute = require('./routes/authRoute');
 
 const app = express();
 app.use(bodyParser.json());
@@ -77,8 +78,12 @@ app.post('/auth/login', async (req, res) => {
     }
 });
 
-app.use('/student', studentRoute(express));
+app.use('v1/student', studentRoute(express));
+app.use('/v1/auth', authRoute(express));
 
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running at http://${hostName}:${PORT}`));
+
+
+

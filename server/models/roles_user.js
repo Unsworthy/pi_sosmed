@@ -1,12 +1,10 @@
 'use strict';
 const {
-  Model,
-  UUIDV4
+  Model
 } = require('sequelize');
 const { v4: uuid4 } = require('uuid');
-
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class roles_user extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -16,19 +14,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
+  roles_user.init({
     id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: uuid4
     },
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    email: DataTypes.STRING
+    user_id: DataTypes.UUID,
+    role_id: DataTypes.UUID
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'roles_user',
   });
-  return User;
+  return roles_user;
 };

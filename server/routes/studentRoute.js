@@ -9,7 +9,7 @@ module.exports = (app) => {
     router.get("/", student_ctrl.index);
 //get by id
     router.get("/:id", student_ctrl.detail);
-//create
+// //create
     router.post("/", [
         body('firstName').notEmpty().withMessage('First name is required'),
         body('lastName').notEmpty().withMessage('Last name is required'),
@@ -50,7 +50,7 @@ module.exports = (app) => {
         body('major_id').notEmpty().custom(async (value) => {
             const majorData = await major.findByPk(value);
             if (!!majorData == false) {
-                throw new Error('Major ID does not exist');
+                throw new Error('Major ID doesnt exist');
             }
 
 

@@ -1,13 +1,16 @@
-GET  http://127.0.0.1:3000/student/2
-# Content-Type: application/json
+POST  http://127.0.0.1:3000/v1/auth/register
+Content-Type: application/json
 
-# {
-#     "firstName": "",
-#     "lastName": "",
-#     "classes": "X",
-#     "major_id": 1 ,
-#     "gender": "F"
-# }
+{
+    "username": "testuser",
+    "password": "password123",
+    "email": "aselole@gmail.com",
+    "firstName": "",
+    "lastName": "",
+    "classes": "X",
+    "major_id": 1 ,
+    "gender": "F"
+}
 ###
 POST  http://127.0.0.1:3000/send-message
 Content-Type: application/json
@@ -56,3 +59,6 @@ Content-Type: application/json
     "message": "Hello, this is a test message!",
     "name": "John Doe"
 }
+
+###
+POST http://127.0.0.1:3000/v1/auth/register

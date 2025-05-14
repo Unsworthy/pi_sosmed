@@ -2,11 +2,25 @@ POST  http://127.0.0.1:3000/v1/auth/register
 Content-Type: application/json
 
 {
-    "username": "testuser",
+    "username": "micimicimi",
     "password": "password123",
     "email": "aselole@gmail.com",
-    "firstName": "",
-    "lastName": "",
+    "firstName": "Michelle",
+    "lastName": "Alexandra",
+    "classes": "X",
+    "major_id": 1,
+    "gender": "F"
+}
+###
+POST  http://127.0.0.1:3000/v1/auth/register
+Content-Type: application/json
+
+{
+    "username": "micimicimi",
+    "password": "password123",
+    "email": "aselole@gmail.com",
+    "firstName": "Michelle",
+    "lastName": "Alexandra",
     "classes": "X",
     "major_id": 1 ,
     "gender": "F"

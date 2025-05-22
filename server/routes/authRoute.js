@@ -32,7 +32,7 @@ module.exports = (app) => {
               username: value,
             },
           });
-          console.log(`userData`, userData);
+          // console.log(`userData`, userData);
 
           if (userData) {
             throw new Error("Username has been registered!");

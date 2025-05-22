@@ -22,39 +22,39 @@ self.create = async (req, res) => {
       gender,
     } = req.body;
 
-    const passwordHash = await bcrypt.hash(password, 10);
+      const passwordHash = await bcrypt.hash(password, 10);
 
-    const userData = await user.create({
-      username: username,
-      email: email,
-      password: passwordHash,
-    });
+      const userData = await user.create({
+        username: username,
+        email: email,
+        password: passwordHash,
+      });
 
-    const studentData =await student.create({
-        firstName: firstName,
-        lastName: lastName,
-        classes: classes,
-        major_id: major_id,
-        gender : gender,
-    })
+      const studentData =await student.create({
+          firstName: firstName,
+          lastName: lastName,
+          classes: classes,
+          major_id: major_id,
+          gender : gender,
+      })
 
-    await student_user.create({
-        user_id: userData.id,
-        student_id: studentData.id,
-    })
+      await student_user.create({
+          user_id: userData.id,
+          student_id: studentData.id,
+      })
 
-    const roleUserRegister = await role.findOne({
-        where: {
-            role_name: "student",
-        },
-        attributes: ["id"],
-    })
-    await role_user.create({
-        user_id: userData.id,
-        role_id: roleUserRegister.id,
-    })
+      const roleUserRegister = await role.findOne({
+          where: {
+              role_name: "student",
+          },
+          attributes: ["id"],
+      })
+      await role_user.create({
+          user_id: userData.id,
+          role_id: roleUserRegister.id,
+      })
 
-    // const newStudent = await student.create({ firstName:firstName, lastName:lastName, classes:classes, major_id:major_id, gender:gender });
+    //  const newStudent = await student.create({ firstName:firstName, lastName:lastName, classes:classes, major_id:major_id, gender:gender });
 
     res.status(201).json({
       message: "Student created successfully!",
@@ -77,7 +77,13 @@ self.login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // const newStudent = await student.create({ firstName:firstName, lastName:lastName, classes:classes, major_id:major_id, gender:gender });
+    const newStudent = await student.create({
+      firstName: firstName,
+      lastName: lastName,
+      classes: classes,
+      major_id: major_id,
+      gender: gender,
+    });
 
     res.status(201).json({
       message: "Login successfully!",

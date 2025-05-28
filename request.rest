@@ -2,13 +2,13 @@ POST  http://127.0.0.1:3000/v1/auth/register
 Content-Type: application/json
 
 {
-    "username": "micimicimi",
-    "password": "password123",
-    "email": "aselole@gmail.com",
-    "firstName": "Michelle",
-    "lastName": "Alexandra",
-    "classes": "X",
-    "major_id": 1,
+    "username": "micel",
+    "password": "pw1233",
+    "email": "mixela@gmail.com",
+    "firstName": "Michelane",
+    "lastName": "celicell",
+    "classes": "XI",
+    "major_id": 2,
     "gender": "F"
 }
 ###
@@ -45,24 +45,28 @@ Content-Type: application/json
 }
 ###
 
-GET http://127.0.0.1:3000/student/2
-
+GET http://127.0.0.1:3000/v1/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDgzOTkwOTAsImV4cCI6MTc0ODQ4NTQ5MH0.EKKqdoQBs4bJkmMQ2UfSsb3dhzl0bNfawEcWLo2PNL0
+# Content-Type: application/json
+# {
+#   "data": "value"
+# }
 ###
-POST http://127.0.0.1:3000/auth/register
+POST http://127.0.0.1:3000/v1/auth/login
 Content-Type: application/json
 
 {
     "username": "testuser",
-    "password": "password123"
+    "password": "password"
 }
 
 ###
-POST http://127.0.0.1:3000/auth/login
+POST http://127.0.0.1:3000/v1/auth/login
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "password": "password123"
+    "username": "micel",
+    "password": "pw1233"
 }
 
 ###

@@ -19,7 +19,7 @@ const hostName = "127.0.0.1";
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 const cosrOption = {
-  origin: ["http://127.0.0.1:5501"],
+  origin: ["http://127.0.0.1:5501", "http://localhost:5173"],
 };
 app.use(cors(cosrOption));
 const SECRET_KEY = process.env.SECRET_KEY || "adios";

@@ -2,7 +2,7 @@ import { APISERVICE, config } from "../../src/utils/services";
 
 export const fetchProfile = (token) => (dispatch) => {
   APISERVICE()
-    .get("/auth/me", config(token))
+    .get("/auth/profile", config(token))
     .then((res) => {
       dispatch({
         type: "FETCH_PROFILE_SUCCESS",
@@ -12,6 +12,9 @@ export const fetchProfile = (token) => (dispatch) => {
       });
     })
     .catch((err) => {
+      if (err.response.status === 401) {
+        window.location.href = "/login";
+      }
       dispatch({
         type: "FETCH_PROFILE_FAIL",
         payload: {

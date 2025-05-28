@@ -1,25 +1,63 @@
 const auth_ctrl = require("../controllers/auth_ctrl"); // Adjust the path as needed
 const { body } = require("express-validator");
 const { major, user } = require("../models");
+const bcrypt = require("bcryptjs");
+const authenticateJWT = require("../middleware/authMiddleware"); // Adjust the path as needed
 
 module.exports = (app) => {
   const router = app.Router();
 
-  // router.get("/login",
-  //     [
-  //         body('username').notEmpty().withMessage('username is required').isLength({ min: 3, max:20 }).withMessage('Username must be at least 3 characters long').custom( async (value) => {
-  //             let userData = await user.findOne({ where: { firstName: value } })
-  //             if (!!userData) {
-  //                 throw new Error('First name already exists');
-  //             }
-  //             return true;
-  //         }),
+  router.get("/profile",authenticateJWT , (req, res) => {
+    res.status(200).json({
+      message: "token is valid",
+      user: req?.user, 
+    });
 
-  //         body('password').notEmpty().withMessage('Password is required'),
-  //     ],
-  //  auth_crtl.login);
+  })
 
-  // router.post("/register", auth_ctrl.save)
+  router.post(
+    "/login",
+    [
+      body("username")
+        .notEmpty()
+        .withMessage("username is required")
+        .isLength({ min: 3, max: 20 })
+        .custom(async (value) => {
+          let userData = await user.findOne({
+            where: {
+              username: value,
+            },
+            attributes: ["id", "username", "password", "email"],
+          });
+
+          if (!!userData === false) {
+            throw new Error("Username has not registered!");
+          }
+
+          this.user = userData;
+        }),
+
+      body("password")
+        .notEmpty()
+        .withMessage("password is required")
+        .isLength({ min: 6, max: 20 })
+        .custom(async (value) => {
+          if (!!this.user) {
+            let isCorrectpass = await bcrypt.compare(
+              value,
+              this.user?.password
+            );
+            console.log(isCorrectpass);
+
+            if (!isCorrectpass) {
+              throw new Error("Password is incorrect!");
+            }
+          }
+        }),
+    ],
+    auth_ctrl.login
+  );
+
   router.post(
     "/register",
     [

@@ -35,19 +35,19 @@ const Home = () => {
   const posting = useSelector((root) => root?.post);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(fetchProfile(profile?.token));
-  //   dispatch(fetchPosting(profile?.token));
-  //   const socket = new WebSocket(WEBSOCKET_URL);
+  useEffect(() => {
+    dispatch(fetchProfile(profile?.token));
+    dispatch(fetchPosting(profile?.token));
+    const socket = new WebSocket(WEBSOCKET_URL);
 
-  //   socket.onopen = () => console.log(`CONNECT TO SERVER`);
-  //   socket.onmessage = (event) => {
-  //     console.log(`ON MESSAGE: ${JSON.stringify(event)}`);
-  //   };
-  //   socket.onerror = (event) => console.log(`ON ERR: ${JSON.stringify(event)}`);
-  //   socket.onclose = (event) =>
-  //     console.log(`ON CLOSE: ${JSON.stringify(event)}`);
-  // }, [dispatch, profile?.token]);
+    socket.onopen = () => console.log(`CONNECT TO SERVER`);
+    socket.onmessage = (event) => {
+      console.log(`ON MESSAGE: ${JSON.stringify(event)}`);
+    };
+    socket.onerror = (event) => console.log(`ON ERR: ${JSON.stringify(event)}`);
+    socket.onclose = (event) =>
+      console.log(`ON CLOSE: ${JSON.stringify(event)}`);
+  }, [dispatch, profile?.token]);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 

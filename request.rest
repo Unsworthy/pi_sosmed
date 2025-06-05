@@ -79,4 +79,6 @@ Content-Type: application/json
 }
 
 ###
-POST http://127.0.0.1:3000/v1/auth/register
+GET http://127.0.0.1:3000/v1/post/list 
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNjhjNDhiNjMtYjIyNi00NjhhLWFmYjMtYjhlZGUwMDMxNTU3IiwidXNlcm5hbWUiOiJtaWNlbCIsImVtYWlsIjoibWl4ZWxhQGdtYWlsLmNvbSJ9LCJpYXQiOjE3NDkwMDA1MjQsImV4cCI6MTc0OTA4NjkyNH0.nFU1FXbAWfEuQS62EhCQ94LXuU4oLqbzUy9TWgIhbTM
+

@@ -124,7 +124,7 @@ const Login = () => {
               Sign in
             </Button>
             <center>
-              <Link to="/Register">Register</Link>
+              <Link to="/register">Register</Link>
             </center>
           </Box>
         </Card>
